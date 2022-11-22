@@ -1,7 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: %i[ show update destroy ]
   before_action :authenticate_user!, only: %i[create update destroy]
-  validates_presence_of :title, :content
 
   # GET /articles
   def index
@@ -12,7 +11,11 @@ class ArticlesController < ApplicationController
 
   # GET /articles/1
   def show
-    render json: @article
+    if @article
+      render json: @article
+    else
+      render json: {message: "Error, it's not your article"}, status: :unprocessable_entity
+    end
   end
 
   # POST /articles
@@ -37,17 +40,25 @@ class ArticlesController < ApplicationController
 
   # DELETE /articles/1
   def destroy
-    @article.destroy
+    if @article
+      @article.destroy
+      render json: {message: "The article was successfully deleted"}, status: :ok
+    else
+      render json: {message: "Error, it's not your article, you can't delete it"}, status: :unprocessable_entity
+    end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_article
       @article = Article.find(params[:id])
+      if current_user.id != @article.user_id
+        @article = nil
+      end
     end
 
     # Only allow a list of trusted parameters through.
     def article_params
-      params.require(:article).permit(:title, :content)
+      params.require(:article).permit(:title, :content, :user_id)
     end
 end
