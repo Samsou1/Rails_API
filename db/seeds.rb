@@ -7,6 +7,15 @@
 #   Character.create(name: "Luke", movie: movies.first)
 require 'faker'
 
+10.times do 
+    User.create(email: Faker::Internet.email(domain: 'example'), password: Faker::Internet.password(min_length: 8))
+end
+
+users = User.all
+print(users)
+
 30.times do 
-    Article.create!(title: Faker::Lorem.word, content: Faker::Lorem.sentence(word_count: 5))
+    print("trying to create an article")
+    print(users.sample)
+    Article.create!(title: Faker::Lorem.word, content: Faker::Lorem.sentence(word_count: 5), user: users.sample)
 end

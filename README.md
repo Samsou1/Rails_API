@@ -1,24 +1,37 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## How to run
 
-Things you may want to cover:
+```
+rails s
+```
 
-* Ruby version
+## How to sign up/log in
 
-* System dependencies
+### In the rails console
 
-* Configuration
+Register:
+```
+curl -XPOST -H "Content-Type: application/json" -d '{ "user": { "email": "example@example.com", "password": "12345678" } }' http://localhost:3000/users
+```
 
-* Database creation
+Log in:
+```
+curl -XPOST -i -H "Content-Type: application/json" -d '{ "user": { "email": "example@example.com", "password": "12345678" } }' http://localhost:3000/users/sign_in
+```
+Access your data:
+```
+curl -XGET -H [your token] -H "Content-Type: application/json" http://localhost:3000/member-data
+```
 
-* Database initialization
+Log out 
+```
+curl -XDELETE -H "Authorization: [your token]" -H "Content-Type: application/json" http://localhost:3000/users/sign_out
+```
 
-* How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+### On Insomnia/postman
 
-* Deployment instructions
 
-* ...
+## How to access articles
+
